@@ -37,6 +37,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='A utility to scrape units from Vancouver/Burnaby City Maps')
     parser.add_argument('infile_path', help='Input File Path')
     parser.add_argument('--city', help='City ([V]ancouver or [B]urnaby)')
+    parser.add_argument('--address', help='Specify Address')
     args = parser.parse_args()
     
     infile = io.open(args.infile_path, mode="r", encoding="utf-8-sig")
@@ -48,22 +49,32 @@ if __name__ == '__main__':
     #print(soup.prettify())
 
     city = args.city and args.city.upper() or args.city
-	
+    address = args.address and args.address.upper() or ''
+
+    print(address)
+
+    prevUnit = ""	
+    address2 = ""
 	
     #Vancouver (Default)
     if city == 'V' or city == None:
         items = soup.find_all("li", id=lambda value: value.split('-')[0].strip().isdigit())
         #ids = [tag['id'] for tag in soup.select('div[id]')]
         items.sort(key=lambda e: int(e['id'].split('-')[0].strip()))
-        prevUnit = "123"
 
         for i in items:
             # print(i)
-            unit = i['id'].split('-')[0].strip()
-            if prevUnit != unit:				
-                print(unit)
+            line = i['id'].split('-')
+            unit = line[0].strip()
+            
+            if address != "":
+                address2 = line[1].strip().upper()
+                #print(address2)
+
+            if prevUnit != unit and address in address2:				
+                print(unit + " - " + address2)
                 outfile.write(unit + '\n')
-            prevUnit = unit
+            prevUnit = unit 
 
     #Burnaby
     elif city == 'B':
@@ -78,8 +89,8 @@ if __name__ == '__main__':
 
         for i in items:
             # print(i)
-            address = i.string.split()
-            unit = address[len(address)-x]
+            line = i.string.split()
+            unit = line[len(line)-x]
             print(unit)
             outfile.write(unit + '\n')
 
