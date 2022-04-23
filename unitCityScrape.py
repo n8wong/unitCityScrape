@@ -68,10 +68,10 @@ if __name__ == '__main__':
             unit = line[0].strip()
             address2 = line[1].strip().upper()
 
-            if prevUnit != unit and address in address2:				
+            if address in address2:				
                 print(unit + " - " + address2)
                 outfile.write(unit + '\n')
-            prevUnit = unit 
+                #prevUnit = unit 
 
     #Burnaby
     elif city == 'B':
