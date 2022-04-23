@@ -66,10 +66,7 @@ if __name__ == '__main__':
             # print(i)
             line = i['id'].split('-')
             unit = line[0].strip()
-            
-            if address != "":
-                address2 = line[1].strip().upper()
-                #print(address2)
+            address2 = line[1].strip().upper()
 
             if prevUnit != unit and address in address2:				
                 print(unit + " - " + address2)
